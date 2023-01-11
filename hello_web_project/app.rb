@@ -2,27 +2,36 @@ require 'sinatra/base'
 require 'sinatra/reloader'
 
 class Application < Sinatra::Base
-  # This allows the app code to refresh
-  # without having to restart the server.
   configure :development do
     register Sinatra::Reloader
   end
 
-  get '/' do
-    name = params[:name]
-  return "Hello #{name}!"
+# Challenge
+# # Request:
+# POST http://localhost:9292/sort-names
+# # With body parameters:
+# names=Joe,Alice,Zoe,Julia,Kieran
+# # Expected response (sorted list of names):
+# Alice,Joe,Julia,Kieran,Zoe
+
+  # challenge
+  post '/sort-names' do
+
+    names = params[:names]
+    # => Joe,Alice,Zoe,Julia,Kieran
+    return names.split(',').sort.join(',')
+    # => Alice,Joe,Julia,Kieran,Zoe
   end
 
-  post '/hello' do
-    name = params[:name]
-  return "Hello #{name}!"
-  # The text content above (string) is sent as a request body
-  end
+# Exercise
+#   Use the Design recipe to test-drive the following route:
+# # Request:
+# GET /names
+# # Expected response (2OO OK):
+# Julia, Mary, Karim
 
-  post '/submit' do
-    name = params[:name]
-    message = params[:message]
-  return "Thanks #{name}, you sent this message: #{message}!"
-  # The text content above (string) is sent as a request body
-  end
+  # get '/names' do
+  #   names = params[:names]
+  #   return "#{names}"
+  # end
 end
