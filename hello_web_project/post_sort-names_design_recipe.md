@@ -23,6 +23,7 @@ Query parameters:
 Body parameters:   
   names (string)
 
+
 ## 2. Design the Response
 
 The route might return different responses, depending on the result.
