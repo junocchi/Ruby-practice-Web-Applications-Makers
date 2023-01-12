@@ -10,8 +10,8 @@ DatabaseConnection.connect
 class Application < Sinatra::Base
   configure :development do
     register Sinatra::Reloader
-    #also_reload 'lib/album_repository'
-    #also_reload 'lib/artist_repository'
+    also_reload 'lib/album_repository'
+    also_reload 'lib/artist_repository'
   end
 
   get '/albums' do
@@ -33,6 +33,28 @@ class Application < Sinatra::Base
     new_album.artist_id = params[:artist_id]
     
     repo.create(new_album)
+    
+    return ''
+  end
+
+  get '/artists' do
+    repo = ArtistRepository.new
+    artists = repo.all
+
+    response = artists.map do |artist|
+      artist.name
+    end.join(', ')
+
+    return response
+  end
+
+  post '/artists' do
+    repo = ArtistRepository.new
+    new_artist = artist.new
+    new_artist.name = params[:name]
+    new_artist.genre = params[:genre]
+    
+    repo.create(new_artist)
     return ''
   end
 end
