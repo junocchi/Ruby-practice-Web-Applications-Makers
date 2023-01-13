@@ -10,6 +10,17 @@ describe Application do
   # class so our tests work.
   let(:app) { Application.new }
 
+  context 'GET /albums/:id' do
+    it 'should return info about specific album' do
+      response = get('/albums/2')
+      expect(response.status).to eq(200)
+      # then we include the most important part of our HTML code, to test it
+      expect(response.body).to include('<h1>Surfer Rosa</h1>')
+      expect(response.body).to include('Release year: 1988')
+      expect(response.body).to include('Artist: Pixies')
+    end  
+  end
+
   context 'GET /albums' do
     it 'should return the list of albums' do
       response = get('/albums')
@@ -30,7 +41,8 @@ describe Application do
         artist_id: '3'
       )
       # post request /albums, given some parameters. 
-      # The album data is correct, but it is just for our test, so it doesn't matter much.
+      # The album data is correct, but it is just for our test, 
+      # so it doesn't matter much.
 
       expect(response.status).to eq(200)
       expect(response.body).to eq('') # returns nothing

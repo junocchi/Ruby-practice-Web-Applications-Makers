@@ -25,6 +25,22 @@ class Application < Sinatra::Base
     return response
   end
 
+  # demo W4 - 3.1
+  get '/albums/:id' do # this is a path parameter and 
+    # Sinatra will get whatever value is given in the path to replace
+    # the dynamic placeholder :id
+    repo = AlbumRepository.new
+    artist_repo = ArtistRepository.new
+
+    # p params[:id]
+    # we use the find method to get the id from the branch
+    @album = repo.find(params[:id]) # we set album as an instance variable
+    # so it can be used in our .erb file, where we will add the HTML info
+    @artist = artist_repo.find(@album.artist_id) # it gets the info from the above param
+
+    return erb(:album) # this will connect to your .erb file, in views
+  end
+
   post '/albums' do
     repo = AlbumRepository.new
     new_album = Album.new
