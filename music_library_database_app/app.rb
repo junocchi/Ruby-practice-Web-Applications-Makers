@@ -14,7 +14,20 @@ class Application < Sinatra::Base
     also_reload 'lib/artist_repository'
   end
 
-  # challenge W4 - 3.3
+  #challenge W4 - 3.4: forms
+  get '/albums/new' do
+    # This route doesn't do much,
+    # it returns the view with the HTML form.
+    return erb(:new_album)
+  end
+
+  get '/artists/new' do
+    # This route doesn't do much,
+    # it returns the view with the HTML form.
+    return erb(:new_artist)
+  end
+
+  # challenge W4 - 3.3: links
   get '/artists' do
     artist_repo = ArtistRepository.new
     @artists = artist_repo.all
@@ -57,6 +70,11 @@ class Application < Sinatra::Base
   end
 
   post '/albums' do
+    if invalid_request_parameters?
+      status 400 # error for when the client adds wrong content
+      return
+    end  
+
     repo = AlbumRepository.new
     new_album = Album.new
     new_album.title = params[:title]
@@ -78,6 +96,10 @@ class Application < Sinatra::Base
 
     return ''
   end
+
+  def invalid_request_parameters?
+    return (params[:title] == nil) || (params[:release_year] == nil) || (params[:artist_id] == nil)
+  end  
 end
   
   # previous challenge
