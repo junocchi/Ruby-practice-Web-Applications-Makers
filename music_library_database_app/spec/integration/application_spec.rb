@@ -10,31 +10,57 @@ describe Application do
   # class so our tests work.
   let(:app) { Application.new }
 
+  context 'GET /artists' do
+    it 'should return name and genre of all artists' do
+      response = get('/artists')
+      expect(response.status).to eq(200)
+      # then we include the most important part of our HTML code, to test it
+      expect(response.body).to include('Pixies')
+      expect(response.body).to include('Rock')
+      
+      expect(response.body).to include('Nina Simone')
+      expect(response.body).to include('Pop')
+    end
+
+    it 'should return a link to all artists' do
+      response = get('/artists')
+      expect(response.status).to eq(200)
+      
+      expect(response.body).to include('href="/artists/2"')
+      expect(response.body).to include('href="/artists/3"')
+    end 
+  end
+
   context 'GET /albums' do
     it 'should return title and release year of all albums' do
       response = get('/albums')
       expect(response.status).to eq(200)
-      # then we include the most important part of our HTML code, to test it
+        # then we include the most important part of our HTML code, to test it
       expect(response.body).to include('Surfer Rosa')
       expect(response.body).to include('Released: 1988')
       
       expect(response.body).to include('Ring Ring')
       expect(response.body).to include('Released: 1973')
+    end  
+
+    it 'should return a link to all albums' do
+      response = get('/albums')
+      expect(response.status).to eq(200)
       
+      expect(response.body).to include('href="/albums/2"')
+      expect(response.body).to include('href="/albums/12"')
     end  
   end
 
-# this test has been updated with the HTML one 'GET /albums'
-# context 'GET /albums' do
-#   it 'should return the list of albums' do
-#     response = get('/albums')
-    
-#     expected_response = 'Surfer Rosa, Waterloo, Super Trouper, Bossanova, Lover, Folklore, I Put a Spell on You, Baltimore, Here Comes the Sun, Fodder on My Wings, Ring Ring'
-    
-#     expect(response.status).to eq(200)
-#     expect(response.body).to eq(expected_response)
-#   end  
-# end
+  context 'GET /artists/:id' do
+    it 'should return info about specific artist' do
+      response = get('/artists/2')
+      expect(response.status).to eq(200)
+      # then we include the most important part of our HTML code, to test it
+      expect(response.body).to include('<h1>ABBA</h1>')
+      expect(response.body).to include('Genre: Pop')
+    end  
+  end
 
   context 'GET /albums/:id' do
     it 'should return info about specific album' do
@@ -44,17 +70,6 @@ describe Application do
       expect(response.body).to include('<h1>Surfer Rosa</h1>')
       expect(response.body).to include('Release year: 1988')
       expect(response.body).to include('Artist: Pixies')
-    end  
-  end
-
-  context 'GET /artists' do
-    it 'should return the list of artists' do
-      response = get('/artists')
-      
-      expected_response = 'Pixies, ABBA, Taylor Swift, Nina Simone, Wild nothing'
-      
-      expect(response.status).to eq(200)
-      expect(response.body).to eq(expected_response)
     end  
   end
 
@@ -88,7 +103,7 @@ describe Application do
       )
 
       expect(response.status).to eq(200)
-      expect(response.body).to eq('') # returns nothing
+      expect(response.body).to eq('')
 
       response = get('/artists')
       expect(response.body).to include('Wild nothing')

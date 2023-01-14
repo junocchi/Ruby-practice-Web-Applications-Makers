@@ -14,6 +14,22 @@ class Application < Sinatra::Base
     also_reload 'lib/artist_repository'
   end
 
+  # challenge W4 - 3.3
+  get '/artists' do
+    artist_repo = ArtistRepository.new
+    @artists = artist_repo.all
+
+    return erb(:artists)
+  end
+
+  get '/artists/:id' do 
+    artist_repo = ArtistRepository.new
+
+    @artist = artist_repo.find(params[:id]) 
+
+    return erb(:artist)
+  end
+
   # challenge W4 - 3.2
   get '/albums' do
     repo = AlbumRepository.new
@@ -52,17 +68,6 @@ class Application < Sinatra::Base
     return ''
   end
 
-  get '/artists' do
-    repo = ArtistRepository.new
-    artists = repo.all
-
-    response = artists.map do |artist|
-      artist.name
-    end.join(', ')
-
-    return response
-  end
-
   post '/artists' do
     repo = ArtistRepository.new
     new_artist = Artist.new
@@ -75,6 +80,18 @@ class Application < Sinatra::Base
   end
 end
   
+  # previous challenge
+  # get '/artists' do
+  #   repo = ArtistRepository.new
+  #   artists = repo.all
+
+  #   response = artists.map do |artist|
+  #     artist.name
+  #   end.join(', ')
+
+  #   return response
+  # end
+
   # previous challenge
   # get '/albums' do
   #   repo = AlbumRepository.new
