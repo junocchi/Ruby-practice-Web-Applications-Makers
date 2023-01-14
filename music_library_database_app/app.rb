@@ -14,15 +14,14 @@ class Application < Sinatra::Base
     also_reload 'lib/artist_repository'
   end
 
+  # challenge W4 - 3.2
   get '/albums' do
     repo = AlbumRepository.new
-    albums = repo.all
+    # we use the find method to get the id from the branch
+    @albums = repo.all # we set album as an instance variable
+    # so it can be used in our .erb file, where we will add the HTML info
 
-    response = albums.map do |album|
-      album.title
-    end.join(', ')
-
-    return response
+    return erb(:albums) # this will connect to your .erb file, in views
   end
 
   # demo W4 - 3.1
@@ -66,11 +65,24 @@ class Application < Sinatra::Base
 
   post '/artists' do
     repo = ArtistRepository.new
-    new_artist = artist.new
+    new_artist = Artist.new
     new_artist.name = params[:name]
     new_artist.genre = params[:genre]
     
     repo.create(new_artist)
+
     return ''
   end
 end
+  
+  # previous challenge
+  # get '/albums' do
+  #   repo = AlbumRepository.new
+  #   albums = repo.all
+
+  #   response = albums.map do |album|
+  #     album.title
+  #   end.join(', ')
+
+  #   return response
+  # end

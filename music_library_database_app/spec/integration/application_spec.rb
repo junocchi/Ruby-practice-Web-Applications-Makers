@@ -10,6 +10,32 @@ describe Application do
   # class so our tests work.
   let(:app) { Application.new }
 
+  context 'GET /albums' do
+    it 'should return title and release year of all albums' do
+      response = get('/albums')
+      expect(response.status).to eq(200)
+      # then we include the most important part of our HTML code, to test it
+      expect(response.body).to include('Surfer Rosa')
+      expect(response.body).to include('Released: 1988')
+      
+      expect(response.body).to include('Ring Ring')
+      expect(response.body).to include('Released: 1973')
+      
+    end  
+  end
+
+# this test has been updated with the HTML one 'GET /albums'
+# context 'GET /albums' do
+#   it 'should return the list of albums' do
+#     response = get('/albums')
+    
+#     expected_response = 'Surfer Rosa, Waterloo, Super Trouper, Bossanova, Lover, Folklore, I Put a Spell on You, Baltimore, Here Comes the Sun, Fodder on My Wings, Ring Ring'
+    
+#     expect(response.status).to eq(200)
+#     expect(response.body).to eq(expected_response)
+#   end  
+# end
+
   context 'GET /albums/:id' do
     it 'should return info about specific album' do
       response = get('/albums/2')
@@ -21,11 +47,11 @@ describe Application do
     end  
   end
 
-  context 'GET /albums' do
-    it 'should return the list of albums' do
-      response = get('/albums')
+  context 'GET /artists' do
+    it 'should return the list of artists' do
+      response = get('/artists')
       
-      expected_response = 'Surfer Rosa, Waterloo, Super Trouper, Bossanova, Lover, Folklore, I Put a Spell on You, Baltimore, Here Comes the Sun, Fodder on My Wings, Ring Ring'
+      expected_response = 'Pixies, ABBA, Taylor Swift, Nina Simone, Wild nothing'
       
       expect(response.status).to eq(200)
       expect(response.body).to eq(expected_response)
@@ -53,18 +79,6 @@ describe Application do
     end  
   end
 
-
-  context 'GET /artists' do
-    it 'should return the list of artists' do
-      response = get('/artists')
-      
-      expected_response = 'Pixies, ABBA, Taylor Swift, Nina Simone, Wild nothing'
-      
-      expect(response.status).to eq(200)
-      expect(response.body).to eq(expected_response)
-    end  
-  end
-
   context 'POST /artists' do
     it 'should create a new artist' do
       response = post(
@@ -73,8 +87,8 @@ describe Application do
         genre: 'Indie',
       )
 
-      # expect(response.status).to eq(200)
-      # expect(response.body).to eq('') # returns nothing
+      expect(response.status).to eq(200)
+      expect(response.body).to eq('') # returns nothing
 
       response = get('/artists')
       expect(response.body).to include('Wild nothing')
